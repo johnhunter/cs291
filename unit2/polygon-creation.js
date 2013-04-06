@@ -7,7 +7,7 @@
 // to draw the polygon.
 // Radius of the polygon is 1. Center of the polygon is at 0, 0.
 ////////////////////////////////////////////////////////////////////////////////
-/*global THREE, Coordinates, document, window*/
+/*global THREE, Coordinates, $, document, window*/
 
 var camera, scene, renderer;
 var windowScale;
@@ -56,7 +56,7 @@ function init() {
 	camera.position.z = 10;
 	camera.lookAt(focus);
 
-	renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true});
+	renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true});
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
 	renderer.setSize( canvasWidth, canvasHeight );

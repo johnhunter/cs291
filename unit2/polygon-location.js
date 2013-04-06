@@ -6,7 +6,7 @@
 // Return the mesh that defines the minimum number of triangles necessary
 // to draw the polygon.
 ////////////////////////////////////////////////////////////////////////////////
-/*global THREE, Coordinates, document, window*/
+/*global, THREE, Coordinates, $, document, window*/
 
 var camera, scene, renderer;
 var windowScale;
@@ -59,7 +59,7 @@ function init() {
 	camera.position.z = 10;
 	camera.lookAt(focus);
 
-	renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true});
+	renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true});
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
 	renderer.setSize(canvasWidth, canvasHeight);

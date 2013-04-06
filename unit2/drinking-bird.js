@@ -11,7 +11,7 @@
 // Body: sphere, red, diameter 116                                            //
 // Spine: cylinder, blue, diameter 24, length 390                             //
 ////////////////////////////////////////////////////////////////////////////////
-/*global THREE, Coordinates, document, window, dat*/
+/*global, THREE, Coordinates, $, document, window, dat*/
 
 var camera, scene, renderer;
 var cameraControls, effectController;
