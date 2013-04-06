@@ -14,16 +14,16 @@ var windowScale;
 
 function PolygonGeometry(sides, location, radius) {
 	var geo = new THREE.Geometry();
-	
+
 	// generate vertices
 	for ( var pt = 0 ; pt < sides; pt++ )
 	{
 		// Add 90 degrees so we start at +Y axis, rotate counterclockwise around
 		var angle = (Math.PI/2) + (pt / sides) * 2 * Math.PI;
 
-		var x = Math.cos(angle) + location.x;
-		var y = Math.sin(angle) + location.y;
-		
+		var x = Math.cos(angle) * radius + location.x;
+		var y = Math.sin(angle) * radius + location.y;
+
 		// Save the vertex location
 		geo.vertices.push( new THREE.Vector3( x, y, 0.0 ) );
 	}
@@ -33,7 +33,7 @@ function PolygonGeometry(sides, location, radius) {
 	{
 		// this makes a triangle fan, from the first +Y point around
 		geo.faces.push( new THREE.Face3( 0, face+1, face+2 ) );
-	}	
+	}
 	// done: return it.
 	return geo;
 }
@@ -52,7 +52,7 @@ function init() {
 	var windowHeight = windowScale;
 
 	camera = new THREE.OrthographicCamera( windowWidth / - 2, windowWidth / 2, windowHeight / 2, windowHeight / - 2, 0, 40 );
-	
+
 	var focus = new THREE.Vector3( 5,5,0 );
 	camera.position.x = focus.x;
 	camera.position.y = focus.y;
@@ -65,7 +65,7 @@ function init() {
 	renderer.gammaOutput = true;
 	renderer.setSize(canvasWidth, canvasHeight);
 	renderer.setClearColorHex( 0xffffff, 1.0 );
-	
+
 }
 function showGrids() {
 	// Background grid and axes. Grid step size is 1, axes cross at 0, 0

@@ -13,7 +13,7 @@ var windowScale;
 
 function PolygonGeometry(sides, location) {
 	var geo = new THREE.Geometry();
-	
+
 	// generate vertices
 	for ( var pt = 0 ; pt < sides; pt++ )
 	{
@@ -24,7 +24,7 @@ function PolygonGeometry(sides, location) {
 		var y = Math.sin( angle );
 
 		// Save the vertex location
-		geo.vertices.push( new THREE.Vector3( x, y, 0.0 ) );
+		geo.vertices.push( new THREE.Vector3( x, y, 0.0 ).add( location ) );
 	}
 
 	// generate faces
@@ -32,7 +32,7 @@ function PolygonGeometry(sides, location) {
 	{
 		// this makes a triangle fan, from the first +Y point around
 		geo.faces.push( new THREE.Face3( 0, face+1, face+2 ) );
-	}	
+	}
 	// done: return it.
 	return geo;
 }
@@ -52,7 +52,7 @@ function init() {
 
 	camera = new THREE.OrthographicCamera( windowWidth / - 2, windowWidth / 2,
 		windowHeight / 2, windowHeight / - 2, 0, 40 );
-	
+
 	var focus = new THREE.Vector3( 3,3,0 );
 	camera.position.x = focus.x;
 	camera.position.y = focus.y;

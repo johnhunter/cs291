@@ -11,19 +11,19 @@ var windowScale;
 
 function someObject (material) {
 	var geometry = new THREE.Geometry();
-	
+
 	// Student: some data below must be fixed 
 	// for both triangles to appear !
 	geometry.vertices.push( new THREE.Vector3( 3, 3, 0 ) );
 	geometry.vertices.push( new THREE.Vector3( 7, 3, 0 ) );
 	geometry.vertices.push( new THREE.Vector3( 7, 7, 0 ) );
 	geometry.vertices.push( new THREE.Vector3( 3, 7, 0 ) );
-	
+
 	geometry.faces.push( new THREE.Face3( 0, 1, 2 ) );
-	geometry.faces.push( new THREE.Face3( 2, 0, 3 ) );
-	
+	geometry.faces.push( new THREE.Face3( 2, 3, 0 ) );
+
 	var mesh = new THREE.Mesh( geometry, material );
-	
+
 	scene.add( mesh );
 }
 
@@ -42,7 +42,7 @@ function init() {
 
 	camera = new THREE.OrthographicCamera( windowWidth / - 2, windowWidth / 2,
 		windowHeight / 2, windowHeight / - 2, 0, 40 );
-	
+
 	var focus = new THREE.Vector3( 5,4,0 );
 	camera.position.x = focus.x;
 	camera.position.y = focus.y;

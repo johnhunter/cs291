@@ -18,11 +18,11 @@ var ground = true;
 function createStairs() {
 
 	// MATERIALS
-	var stepMaterialVertical = new THREE.MeshLambertMaterial( { 
-		color: 0xA85F35 
+	var stepMaterialVertical = new THREE.MeshLambertMaterial( {
+		color: 0xA85F35
 	} );
-	var stepMaterialHorizontal = new THREE.MeshLambertMaterial( { 
-		color: 0xBC7349 
+	var stepMaterialHorizontal = new THREE.MeshLambertMaterial( {
+		color: 0xBC7349
 	} );
 
 	var stepWidth = 500;
@@ -33,7 +33,10 @@ function createStairs() {
 	var horizontalStepDepth = stepSize*2;
 
 	var stepHalfThickness = stepThickness/2;
-	
+
+    var verticalRise = verticalStepHeight + stepThickness;
+    var horizontalRize = horizontalStepDepth - stepThickness;
+
 	// +Y direction is up
 	// Define the two pieces of the step, vertical and horizontal
 	// THREE.CubeGeometry takes (width, height, depth)
@@ -41,23 +44,27 @@ function createStairs() {
 	var stepHorizontal = new THREE.CubeGeometry(stepWidth, stepThickness, horizontalStepDepth);
 	var stepMesh;
 
-	// Make and position the vertical part of the step
-	stepMesh = new THREE.Mesh( stepVertical, stepMaterialVertical );
-	// The position is where the center of the block will be put.
-	// You can define position as THREE.Vector3(x, y, z) or in the following way:
-	stepMesh.position.x = 0;			// centered at origin
-	stepMesh.position.y = verticalStepHeight/2;	// half of height: put it above ground plane
-	stepMesh.position.z = 0;			// centered at origin
-	scene.add( stepMesh );
+    for (var currStep = 0; currStep < 6; currStep++) {
 
-	// Make and position the horizontal part
-	stepMesh = new THREE.Mesh( stepHorizontal, stepMaterialHorizontal );
-	stepMesh.position.x = 0;
-	// Push up by half of horizontal step's height, plus vertical step's height
-	stepMesh.position.y = stepThickness/2 + verticalStepHeight;
-	// Push step forward by half the depth, minus half the vertical step's thickness
-	stepMesh.position.z = horizontalStepDepth/2 - stepHalfThickness;
-	scene.add( stepMesh );
+        // Make and position the vertical part of the step
+        stepMesh = new THREE.Mesh( stepVertical, stepMaterialVertical );
+        // The position is where the center of the block will be put.
+        // You can define position as THREE.Vector3(x, y, z) or in the following way:
+        stepMesh.position.x = 0;			// centered at origin
+        stepMesh.position.y = verticalStepHeight/2 + verticalRise * currStep; // half of height: put it above ground plane
+        stepMesh.position.z = 0 + horizontalRize * currStep;			// centered at origin
+        scene.add( stepMesh );
+
+        // Make and position the horizontal part
+        stepMesh = new THREE.Mesh( stepHorizontal, stepMaterialHorizontal );
+        stepMesh.position.x = 0;
+        // Push up by half of horizontal step's height, plus vertical step's height
+        stepMesh.position.y = stepThickness/2 + verticalStepHeight + verticalRise * currStep;
+        // Push step forward by half the depth, minus half the vertical step's thickness
+        stepMesh.position.z = horizontalStepDepth/2 - stepHalfThickness + horizontalRize * currStep;
+        scene.add( stepMesh );
+    }
+
 }
 
 function createCup() {
@@ -96,6 +103,10 @@ function init() {
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,600,0);
 
+	// Camera(2) for testing has following values:
+	// camera.position.set( 1225, 2113, 1814 );
+	// cameraControls.target.set(-1800,180,630);
+
 	fillScene();
 }
 function addToDOM() {
@@ -114,7 +125,7 @@ function fillScene() {
 	var ambientLight = new THREE.AmbientLight( 0x222222 );
 	var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light.position.set( 200, 400, 500 );
-	
+
 	var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light2.position.set( -400, 200, -300 );
 
@@ -122,8 +133,10 @@ function fillScene() {
 	scene.add(light);
 	scene.add(light2);
 
+	scene.add(camera);
+
 	if (ground) {
-		Coordinates.drawGround({size:1000});		
+		Coordinates.drawGround({size:1000});
 	}
 	if (gridX) {
 		Coordinates.drawGrid({size:1000,scale:0.01});
@@ -132,7 +145,7 @@ function fillScene() {
 		Coordinates.drawGrid({size:1000,scale:0.01, orientation:"y"});
 	}
 	if (gridZ) {
-		Coordinates.drawGrid({size:1000,scale:0.01, orientation:"z"});	
+		Coordinates.drawGrid({size:1000,scale:0.01, orientation:"z"});
 	}
 	if (axes) {
 		Coordinates.drawAllAxes({axisLength:300,axisRadius:2,axisTess:50});
@@ -167,12 +180,15 @@ function render() {
 function setupGui() {
 
 	effectController = {
-	
+
 		newGridX: gridX,
 		newGridY: gridY,
 		newGridZ: gridZ,
 		newGround: ground,
-		newAxes: axes
+		newAxes: axes,
+
+		dummy: function() {
+		}
 	};
 
 	var gui = new dat.GUI();

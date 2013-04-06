@@ -14,7 +14,7 @@ var windowScale;
 
 function PolygonGeometry(sides) {
 	var geo = new THREE.Geometry();
-	
+
 	// generate vertices
 	for ( var pt = 0 ; pt < sides; pt++ )
 	{
@@ -23,13 +23,16 @@ function PolygonGeometry(sides) {
 
 		var x = Math.cos( angle );
 		var y = Math.sin( angle );
-		
+
 		// YOUR CODE HERE
         //Save the vertex location - fill in the code
-
+        geo.vertices.push( new THREE.Vector3( x, y, 0 ) );
 	}
     // YOUR CODE HERE
 	// Write the code to generate minimum number of faces for the polygon.
+    for (var faceCount = 1; faceCount <= sides - 2; faceCount++ ) {
+        geo.faces.push( new THREE.Face3( 0,  faceCount, faceCount + 1) );
+    }
 
 	// Return the geometry object
 	return geo;
@@ -49,7 +52,7 @@ function init() {
 	var windowHeight = windowScale;
 
 	camera = new THREE.OrthographicCamera( windowWidth / - 2, windowWidth / 2, windowHeight / 2, windowHeight / - 2, 0, 40 );
-	
+
 	var focus = new THREE.Vector3( 0,1,0 );
 	camera.position.x = focus.x;
 	camera.position.y = focus.y;
@@ -70,8 +73,8 @@ function showGrids() {
 	Coordinates.drawAxes({axisLength:3,axisOrientation:"y",axisRadius:0.02});
 }
 function addToDOM() {
-    var container = document.getElementById('container');
-    var canvas = container.getElementsByTagName('canvas');
+	var container = document.getElementById('container');
+	var canvas = container.getElementsByTagName('canvas');
     if (canvas.length>0) {
         container.removeChild(canvas[0]);
     }
