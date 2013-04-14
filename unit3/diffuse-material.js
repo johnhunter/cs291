@@ -9,8 +9,8 @@ var ambientLight, light;
 function init() {
 	var canvasWidth = window.innerWidth;
     var canvasHeight = window.innerHeight;
-	canvasWidth = 846;
-	canvasHeight = 494;
+	//canvasWidth = 846;
+	//canvasHeight = 494;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// CAMERA
@@ -42,8 +42,16 @@ function init() {
 }
 
 function createBall() {
-    // Do not change the color itself, change the material and use the ambient and diffuse components". 
-	var material = new THREE.MeshBasicMaterial( { color: 0xFF0000, shading: THREE.FlatShading } );
+    // Do not change the color itself, change the material and use the ambient and diffuse components".
+	var material = new THREE.MeshLambertMaterial( { color: 0xFF0000, shading: THREE.FlatShading } );
+	var ka = 0.4;
+	var kr = material.color;
+	material.ambient.setRGB(
+		kr.r * ka,
+		kr.g * ka,
+		kr.b * ka
+	);
+
 	var sphere = new THREE.Mesh( new THREE.SphereGeometry( 400, 64, 32 ), material );
 	return sphere;
 }
@@ -62,7 +70,7 @@ function fillScene() {
 
 	//Coordinates.drawGround({size:1000});
 	//Coordinates.drawGrid({size:1000,scale:0.01});
-	//Coordinates.drawAllAxes({axisLength:500,axisRadius:1,axisTess:4});
+	Coordinates.drawAllAxes({axisLength:500,axisRadius:1,axisTess:4});
 }
 
 function addToDOM() {
