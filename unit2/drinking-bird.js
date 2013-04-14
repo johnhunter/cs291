@@ -99,19 +99,21 @@ function createBody() {
     var sphereMaterial = new THREE.MeshLambertMaterial( { color: 0xA00000 } );
     var cylinderMaterial = new THREE.MeshLambertMaterial( { color: 0x0000D0 } );
 
-    var sphere;
-    var cylinder;
+    var body;
+    var neck;
 
-    sphere = new THREE.Mesh(
+    var bottomY = 160;
+
+    body = new THREE.Mesh(
         new THREE.SphereGeometry( 116/2, 32, 16 ), sphereMaterial);
-    sphere.position.y = 140;
-    scene.add( sphere );
+    body.position.y = bottomY;
+    scene.add( body );
 
-    cylinder = new THREE.Mesh(
-        new THREE.CylinderGeometry( 12, 12, 300, 32), cylinderMaterial);
+    neck = new THREE.Mesh(
+        new THREE.CylinderGeometry( 24/2, 24/2, 390, 32), cylinderMaterial);
 
-    cylinder.position.y = 300/2;
-    scene.add( cylinder );
+    neck.position.y = 390/2 + bottomY;
+    scene.add( neck );
 
 }
 
@@ -119,6 +121,27 @@ function createBody() {
 function createHead() {
     var sphereMaterial = new THREE.MeshLambertMaterial( { color: 0xA00000 } );
     var cylinderMaterial = new THREE.MeshLambertMaterial( { color: 0x0000D0 } );
+
+    var head;
+    var hat;
+    var brim;
+
+    var bottomY = 160 + 390;
+
+    head = new THREE.Mesh(
+        new THREE.SphereGeometry( 104/2, 32, 16 ), sphereMaterial);
+    head.position.y = bottomY;
+    scene.add( head );
+
+    brim = new THREE.Mesh(
+        new THREE.CylinderGeometry( 142/2, 142/2, 10, 32 ), cylinderMaterial);
+    brim.position.y = bottomY + 40 + (10/2);
+    scene.add ( brim );
+
+    hat = new THREE.Mesh(
+        new THREE.CylinderGeometry( 80/2, 80/2, 70, 32 ), cylinderMaterial);
+    hat.position.y = bottomY + 50 + (70/2);
+    scene.add ( hat );
 
 }
 
