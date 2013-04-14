@@ -25,6 +25,8 @@ var ground = true;
 function init() {
     var canvasWidth = window.innerWidth;
     var canvasHeight = window.innerHeight;
+    //canvasWidth = 846;
+    //canvasHeight = 494;
     var canvasRatio = canvasWidth / canvasHeight;
 
     // RENDERER
