@@ -1,7 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Diffuse material exercise
 ////////////////////////////////////////////////////////////////////////////////
-/*global THREE, window, document, Coordinates*/
+/*global THREE, requestAnimationFrame, Detector, Stats, dat window document Coordinates*/
 var camera, scene, renderer;
 var cameraControls;
 var clock = new THREE.Clock();
@@ -9,12 +8,15 @@ var ambientLight, light;
 
 function init() {
 	var canvasWidth = window.innerWidth;
-	var canvasHeight = window.innerHeight;
+    var canvasHeight = window.innerHeight;
+	canvasWidth = 846;
+	canvasHeight = 494;
+	var canvasRatio = canvasWidth / canvasHeight;
 
 	// CAMERA
 
-	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 80000 );
-	camera.position.set( -300, 300, -1500 );
+	camera = new THREE.PerspectiveCamera( 45, canvasRatio, 1, 80000 );
+	camera.position.set( -300, 300, -1000 );
 	camera.lookAt(0,0,0);
 	// LIGHTS
 
@@ -40,6 +42,7 @@ function init() {
 }
 
 function createBall() {
+    // Do not change the color itself, change the material and use the ambient and diffuse components". 
 	var material = new THREE.MeshBasicMaterial( { color: 0xFF0000, shading: THREE.FlatShading } );
 	var sphere = new THREE.Mesh( new THREE.SphereGeometry( 400, 64, 32 ), material );
 	return sphere;
@@ -48,6 +51,7 @@ function createBall() {
 function fillScene() {
 	scene = new THREE.Scene();
 	scene.fog = new THREE.Fog( 0x808080, 2000, 4000 );
+	scene.add( camera );
 
 	// LIGHTS
 	scene.add( ambientLight );
@@ -58,7 +62,7 @@ function fillScene() {
 
 	//Coordinates.drawGround({size:1000});
 	//Coordinates.drawGrid({size:1000,scale:0.01});
-	Coordinates.drawAllAxes({axisLength:500,axisRadius:1,axisTess:4});
+	//Coordinates.drawAllAxes({axisLength:500,axisRadius:1,axisTess:4});
 }
 
 function addToDOM() {
