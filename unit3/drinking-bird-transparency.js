@@ -179,8 +179,10 @@ function drawDrinkingBird() {
 }
 
 function init() {
-	var canvasWidth = 846;
-	var canvasHeight = 494;
+	var canvasWidth = window.innerWidth;
+	var canvasHeight = window.innerHeight;
+	// canvasWidth = 846;
+	// canvasHeight = 494;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
