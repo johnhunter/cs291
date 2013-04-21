@@ -71,7 +71,7 @@ function fillScene() {
 	cube.position.y = 14;
 
 	// YOUR CODE HERE
-
+	cube.rotation.y += -45 * Math.PI/180;
 	scene.add( cube );
 }
 
@@ -97,8 +97,8 @@ function drawHelpers() {
 function init() {
 	var canvasWidth = window.innerWidth;
 	var canvasHeight = window.innerHeight;
-	canvasWidth = 846;
-	canvasHeight = 494;
+	//canvasWidth = 846;
+	//canvasHeight = 494;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
