@@ -1,8 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Clock hand rotation: rotate the hand into the proper orientation
-////////////////////////////////////////////////////////////////////////////////
-/*global THREE, Coordinates, document, window, dat*/
 
+/*global THREE, Coordinates, document, window, dat*/
 
 var camera, scene, renderer;
 var cameraControls, effectController;
@@ -30,22 +28,6 @@ function fillScene() {
 	scene.add(light);
 	scene.add(light2);
 
-	if (ground) {
-		Coordinates.drawGround({size:10000});		
-	}
-	if (gridX) {
-		Coordinates.drawGrid({size:10000,scale:0.01});
-	}
-	if (gridY) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
-	}
-	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});	
-	}
-	if (axes) {
-		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
-	}
-	
 	var faceMaterial = new THREE.MeshLambertMaterial( { color: 0xFFECA9 } );
 	var markMaterial = new THREE.MeshLambertMaterial( { color: 0x89581F } );
 	var mark12Material = new THREE.MeshLambertMaterial( { color: 0xE6880E } );
@@ -83,18 +65,40 @@ function fillScene() {
 	cube.position.y = 9;
 	scene.add( cube );
 	
+    // CODE FOR THE CLOCK HAND
 	cube = new THREE.Mesh( 
 		new THREE.CubeGeometry( 110, 4, 4 ), handMaterial );
 	cube.position.y = 14;
-	
-	// the student needs to add code here:
+
+	// YOUR CODE HERE
 
 	scene.add( cube );
 }
 
+function drawHelpers() {
+    if (ground) {
+		Coordinates.drawGround({size:10000});		
+	}
+	if (gridX) {
+		Coordinates.drawGrid({size:10000,scale:0.01});
+	}
+	if (gridY) {
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
+	}
+	if (gridZ) {
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});	
+	}
+	if (axes) {
+		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
+	}
+}
+    
+    
 function init() {
 	var canvasWidth = window.innerWidth;
 	var canvasHeight = window.innerHeight;
+	canvasWidth = 846;
+	canvasHeight = 494;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
@@ -142,6 +146,8 @@ function render() {
 		axes = effectController.newAxes;
 
 		fillScene();
+        console.log(camera.location);
+        console.log(cameraControls.target);
 	}
 	renderer.render(scene, camera);
 }
@@ -168,4 +174,5 @@ function setupGui() {
 init();
 addToDOM();
 setupGui();
+drawHelpers();
 animate();
