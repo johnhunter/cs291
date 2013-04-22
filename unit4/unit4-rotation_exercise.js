@@ -20,7 +20,7 @@ function fillScene() {
 
 	var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light.position.set( 200, 400, 500 );
-	
+
 	var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light2.position.set( -500, 250, -200 );
 
@@ -34,50 +34,51 @@ function fillScene() {
 	var handMaterial = new THREE.MeshLambertMaterial( { color: 0x226894 } );
 
 	// clock
-	var clock = new THREE.Mesh( 
+	var clock = new THREE.Mesh(
 		new THREE.CylinderGeometry( 75, 75, 10, 32 ), faceMaterial );
 		//new THREE.CubeGeometry( 150, 5, 150 ), faceMaterial );
 	clock.position.y = 5;
 	scene.add( clock );
-	
+
 	// marks
-	var cube = new THREE.Mesh( 
+	var cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 20, 4, 15 ), mark12Material );
 	cube.position.x = 60;
 	cube.position.y = 9;
 	scene.add( cube );
-	
-	cube = new THREE.Mesh( 
+
+	cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 10, 4, 10 ), markMaterial );
 	cube.position.x = -60;
 	cube.position.y = 9;
 	scene.add( cube );
-	
-	cube = new THREE.Mesh( 
+
+	cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 10, 4, 10 ), markMaterial );
 	cube.position.z = 60;
 	cube.position.y = 9;
 	scene.add( cube );
-	
-	cube = new THREE.Mesh( 
+
+	cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 10, 4, 10 ), markMaterial );
 	cube.position.z = -60;
 	cube.position.y = 9;
 	scene.add( cube );
-	
+
     // CODE FOR THE CLOCK HAND
-	cube = new THREE.Mesh( 
+	cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 110, 4, 4 ), handMaterial );
 	cube.position.y = 14;
 
 	// YOUR CODE HERE
-	cube.rotation.y += -45 * Math.PI/180;
+	var hourRotation = (360/12) * Math.PI/180;
+	cube.rotation.y += -hourRotation * 2;
 	scene.add( cube );
 }
 
 function drawHelpers() {
     if (ground) {
-		Coordinates.drawGround({size:10000});		
+		Coordinates.drawGround({size:10000});
 	}
 	if (gridX) {
 		Coordinates.drawGrid({size:10000,scale:0.01});
@@ -86,14 +87,14 @@ function drawHelpers() {
 		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
 	}
 	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});	
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
 	}
 	if (axes) {
 		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
 	}
 }
-    
-    
+
+
 function init() {
 	var canvasWidth = window.innerWidth;
 	var canvasHeight = window.innerHeight;
@@ -114,7 +115,7 @@ function init() {
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,0,0);
-	
+
 	fillScene();
 
 }
