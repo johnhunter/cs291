@@ -1,8 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Clock exercise: rotate hands correctly
 ////////////////////////////////////////////////////////////////////////////////
-
-/*global THREE, Coordinates, $, document, window, dat*/
+/*global THREE, Coordinates, document, window, dat*/
 
 var camera, scene, renderer;
 var cameraControls, effectController;
@@ -29,22 +28,6 @@ function fillScene() {
 	scene.add(ambientLight);
 	scene.add(light);
 	scene.add(light2);
-
-	if (ground) {
-		Coordinates.drawGround({size:10000});
-	}
-	if (gridX) {
-		Coordinates.drawGrid({size:10000,scale:0.01});
-	}
-	if (gridY) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
-	}
-	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
-	}
-	if (axes) {
-		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
-	}
 
 	var faceMaterial = new THREE.MeshLambertMaterial( { color: 0xFFECA9 } );
 	var markMaterial = new THREE.MeshLambertMaterial( { color: 0x89581F } );
@@ -84,30 +67,40 @@ function fillScene() {
 	cube.position.y = 9;
 	scene.add( cube );
 
-
-	// Student modifies code below:
+  // YOUR CODE HERE:
+  // The dimensions and rotation angles of the hands are correct
+  // you just have find a way to perform them in the correct order
 	cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 70, 4, 4 ), minuteHandMaterial );
 	cube.position.y = 14;
 	cube.position.x = 70/2 - 10;
-	cube.rotation.y = -60 * Math.PI/180;
-	scene.add( cube );
+
+    var minuteHand = new THREE.Object3D();
+    minuteHand.add( cube );
+    minuteHand.rotation.y = -60 * Math.PI/180;
+
+	scene.add( minuteHand );
 
 	var sphere = new THREE.Mesh(
 		new THREE.SphereGeometry( 0.5, 32, 16 ), hourHandMaterial );
 	sphere.position.y = 18;	// move the hand above the other hand
 	sphere.position.x = 50/2 - 10;
-	sphere.rotation.y = 30 * Math.PI/180;
 	sphere.scale.x = 50;
 	sphere.scale.y = 4;
 	sphere.scale.z = 4;
 
-	scene.add( sphere );
+    var hourHand = new THREE.Object3D();
+    hourHand.add( sphere );
+	hourHand.rotation.y = 30 * Math.PI/180;
+
+	scene.add( hourHand );
 }
 
 function init() {
 	var canvasWidth = window.innerWidth;
 	var canvasHeight = window.innerHeight;
+	//canvasWidth = 846;
+	//canvasHeight = 494;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
@@ -116,9 +109,6 @@ function init() {
 	renderer.gammaOutput = true;
 	renderer.setSize(canvasWidth, canvasHeight);
 	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
-
-	var container = document.getElementById('container');
-	container.appendChild( renderer.domElement );
 
 	// CAMERA
 	camera = new THREE.PerspectiveCamera( 30, canvasRatio, 1, 10000 );
@@ -129,6 +119,32 @@ function init() {
 
 	fillScene();
 
+}
+function drawHelpers() {
+    if (ground) {
+		Coordinates.drawGround({size:10000});
+	}
+	if (gridX) {
+		Coordinates.drawGrid({size:10000,scale:0.01});
+	}
+	if (gridY) {
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
+	}
+	if (gridZ) {
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
+	}
+	if (axes) {
+		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
+	}
+}
+
+function addToDOM() {
+    var container = document.getElementById('container');
+    var canvas = container.getElementsByTagName('canvas');
+    if (canvas.length>0) {
+        container.removeChild(canvas[0]);
+    }
+    container.appendChild( renderer.domElement );
 }
 
 function animate() {
@@ -174,23 +190,8 @@ function setupGui() {
 	gui.add( effectController, "newAxes" ).name("Show axes");
 }
 
-function takeScreenshot() {
-	effectController.newGround = true, effectController.newGridX = false, effectController.newGridY = false, effectController.newGridZ = false, effectController.newAxes = false;
-	init();
-	render();
-	var img1 = renderer.domElement.toDataURL("image/png");
-	camera.position.set( 400, 500, -800 );
-	render();
-	var img2 = renderer.domElement.toDataURL("image/png");
-	var imgTarget = window.open('', 'For grading script');
-	imgTarget.document.write('<img src="'+img1+'"/><img src="'+img2+'"/>');
-}
-
 init();
+drawHelpers();
+addToDOM();
 setupGui();
 animate();
-$("body").keydown(function(event) {
-	if (event.which === 80) {
-		takeScreenshot();
-	}
-});
