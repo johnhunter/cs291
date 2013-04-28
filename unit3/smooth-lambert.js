@@ -80,13 +80,13 @@ function animate() {
 
 	window.requestAnimationFrame( animate );
 	render();
-	
+
 }
 
 function render() {
 	var delta = clock.getDelta();
 	cameraControls.update(delta);
-	
+
 	renderer.render( scene, camera );
 
 }

@@ -16,7 +16,7 @@ function exampleTriangle() {
 	triangle.vertices.push( new THREE.Vector3( 1, 1, 0 ) );
 	triangle.vertices.push( new THREE.Vector3( 3, 1, 0 ) );
 	triangle.vertices.push( new THREE.Vector3( 3, 3, 0 ) );
-	
+
 	triangle.faces.push( new THREE.Face3( 0, 1, 2 ) );
 
 	return triangle;
@@ -45,7 +45,7 @@ function init() {
 	var windowHeight = windowScale;
 
 	camera = new THREE.OrthographicCamera(windowWidth/-2, windowWidth/2, windowHeight/2, windowHeight/-2, 0, 40);
-	
+
 	var focus = new THREE.Vector3( 5,5,0 );
 	camera.position.x = focus.x;
 	camera.position.y = focus.y;

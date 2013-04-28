@@ -22,7 +22,7 @@ function fillScene() {
 
 	var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light.position.set( 200, 400, 500 );
-	
+
 	var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light2.position.set( -500, 250, -200 );
 
@@ -31,7 +31,7 @@ function fillScene() {
 	scene.add(light2);
 
 	if (ground) {
-		Coordinates.drawGround({size:10000});		
+		Coordinates.drawGround({size:10000});
 	}
 	if (gridX) {
 		Coordinates.drawGrid({size:10000,scale:0.01});
@@ -40,31 +40,31 @@ function fillScene() {
 		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
 	}
 	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});	
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
 	}
 	if (axes) {
 		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
 	}
-	
+
 	var snowMaterial = new THREE.MeshLambertMaterial( { color: 0xFFFFFF } );
 	var woodMaterial = new THREE.MeshLambertMaterial( { color: 0x75691B } );
 
-	var sphere = new THREE.Mesh( 
+	var sphere = new THREE.Mesh(
 		new THREE.SphereGeometry( 20, 32, 16 ), snowMaterial );
 	sphere.position.y = 20;
 	scene.add( sphere );
-	
-	sphere = new THREE.Mesh( 
+
+	sphere = new THREE.Mesh(
 		new THREE.SphereGeometry( 15, 32, 16 ), snowMaterial );
 	sphere.position.y = 50;
 	scene.add( sphere );
-	
-	sphere = new THREE.Mesh( 
+
+	sphere = new THREE.Mesh(
 		new THREE.SphereGeometry( 10, 32, 16 ), snowMaterial );
 	sphere.position.y = 70;
 	scene.add( sphere );
-	
-	var cylinder = new THREE.Mesh( 
+
+	var cylinder = new THREE.Mesh(
 		new THREE.CylinderGeometry( 2, 2, 60, 32 ), woodMaterial );
 	// These positions are given just so you can see the stick.
 	// You will need to reposition, etc.
@@ -96,7 +96,7 @@ function init() {
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,50,0);
-	
+
 	fillScene();
 
 }

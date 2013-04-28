@@ -22,7 +22,7 @@ function fillScene() {
 
 	var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light.position.set( 200, 400, 500 );
-	
+
 	var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light2.position.set( -500, 250, -200 );
 
@@ -31,7 +31,7 @@ function fillScene() {
 	scene.add(light2);
 
 	if (ground) {
-		Coordinates.drawGround({size:10000});		
+		Coordinates.drawGround({size:10000});
 	}
 	if (gridX) {
 		Coordinates.drawGrid({size:10000,scale:0.01});
@@ -40,12 +40,12 @@ function fillScene() {
 		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
 	}
 	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});	
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
 	}
 	if (axes) {
 		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
 	}
-	
+
 	var faceMaterial = new THREE.MeshLambertMaterial( { color: 0xFFECA9 } );
 	var markMaterial = new THREE.MeshLambertMaterial( { color: 0x89581F } );
 	var mark12Material = new THREE.MeshLambertMaterial( { color: 0xE6880E } );
@@ -53,55 +53,55 @@ function fillScene() {
 	var hourHandMaterial = new THREE.MeshLambertMaterial( { color: 0xE02BFB } );
 
 	// clock
-	var clock = new THREE.Mesh( 
+	var clock = new THREE.Mesh(
 		new THREE.CylinderGeometry( 75, 75, 10, 32 ), faceMaterial );
 		//new THREE.CubeGeometry( 150, 5, 150 ), faceMaterial );
 	clock.position.y = 5;
 	scene.add( clock );
-	
+
 	// marks
-	var cube = new THREE.Mesh( 
+	var cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 20, 4, 15 ), mark12Material );
 	cube.position.x = 60;
 	cube.position.y = 9;
 	scene.add( cube );
-	
-	cube = new THREE.Mesh( 
+
+	cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 10, 4, 10 ), markMaterial );
 	cube.position.x = -60;
 	cube.position.y = 9;
 	scene.add( cube );
-	
-	cube = new THREE.Mesh( 
+
+	cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 10, 4, 10 ), markMaterial );
 	cube.position.z = 60;
 	cube.position.y = 9;
 	scene.add( cube );
-	
-	cube = new THREE.Mesh( 
+
+	cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 10, 4, 10 ), markMaterial );
 	cube.position.z = -60;
 	cube.position.y = 9;
 	scene.add( cube );
-	
-	
+
+
 	// Student modifies code below:
-	cube = new THREE.Mesh( 
+	cube = new THREE.Mesh(
 		new THREE.CubeGeometry( 70, 4, 4 ), minuteHandMaterial );
 	cube.position.y = 14;
 	cube.position.x = 70/2 - 10;
 	cube.rotation.y = -60 * Math.PI/180;
 	scene.add( cube );
 
-	var sphere = new THREE.Mesh( 
+	var sphere = new THREE.Mesh(
 		new THREE.SphereGeometry( 0.5, 32, 16 ), hourHandMaterial );
-	sphere.position.y = 18;	// move the hand above the other hand	
+	sphere.position.y = 18;	// move the hand above the other hand
 	sphere.position.x = 50/2 - 10;
 	sphere.rotation.y = 30 * Math.PI/180;
 	sphere.scale.x = 50;
 	sphere.scale.y = 4;
 	sphere.scale.z = 4;
-	
+
 	scene.add( sphere );
 }
 
@@ -126,7 +126,7 @@ function init() {
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,0,0);
-	
+
 	fillScene();
 
 }

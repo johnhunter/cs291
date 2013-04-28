@@ -12,7 +12,7 @@ var windowScale;
 function someObject (material) {
 	var geometry = new THREE.Geometry();
 
-	// Student: some data below must be fixed 
+	// Student: some data below must be fixed
 	// for both triangles to appear !
 	geometry.vertices.push( new THREE.Vector3( 3, 3, 0 ) );
 	geometry.vertices.push( new THREE.Vector3( 7, 3, 0 ) );

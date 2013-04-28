@@ -23,7 +23,7 @@ function fillScene() {
 
 	var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light.position.set( 200, 400, 500 );
-	
+
 	var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light2.position.set( -500, 250, -200 );
 
@@ -32,7 +32,7 @@ function fillScene() {
 	scene.add(light2);
 
 	if (ground) {
-		Coordinates.drawGround({size:10000});		
+		Coordinates.drawGround({size:10000});
 	}
 	if (gridX) {
 		Coordinates.drawGrid({size:10000,scale:0.01});
@@ -41,37 +41,37 @@ function fillScene() {
 		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
 	}
 	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});	
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
 	}
 	if (axes) {
 		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
 	}
-	
+
 	var robotHandLeftMaterial = new THREE.MeshPhongMaterial( { color: 0xCC3399, specular: 0xCC3399, shininess: 20 } );
 	var robotHandRightMaterial = new THREE.MeshPhongMaterial( { color: 0xDD3388, specular: 0xDD3388, shininess: 20 } );
 	var robotBaseMaterial = new THREE.MeshPhongMaterial( { color: 0x6E23BB, specular: 0x6E23BB, shininess: 20 } );
 	var robotForearmMaterial = new THREE.MeshPhongMaterial( { color: 0xF4C154, specular: 0xF4C154, shininess: 100 } );
 	var robotUpperArmMaterial = new THREE.MeshPhongMaterial( { color: 0x95E4FB, specular: 0x95E4FB, shininess: 100 } );
 
-	var torus = new THREE.Mesh( 
+	var torus = new THREE.Mesh(
 		new THREE.TorusGeometry( 22, 15, 32, 32 ), robotBaseMaterial );
 	torus.rotation.x = 90 * Math.PI/180;
 	scene.add( torus );
-	
+
 	forearm = new THREE.Object3D();
 	var faLength = 80;
 
 	createRobotExtender( forearm, faLength, robotForearmMaterial );
 
 	arm = new THREE.Object3D();
-	var uaLength = 120;	
-	
+	var uaLength = 120;
+
 	createRobotCrane( arm, uaLength, robotUpperArmMaterial );
-	
+
 	// Move the forearm itself to the end of the upper arm.
-	forearm.position.y = uaLength;	
+	forearm.position.y = uaLength;
 	arm.add( forearm );
-	
+
 	scene.add( arm );
 
 
@@ -80,13 +80,13 @@ function fillScene() {
 	handLeft = new THREE.Object3D();
 	createRobotGrabber( handLeft, handLength, robotHandLeftMaterial );
 	// Move the hand part to the end of the forearm.
-	handLeft.position.y = faLength;		
+	handLeft.position.y = faLength;
 	forearm.add( handLeft );
 }
 
 function createRobotGrabber( part, length, material )
 {
-	var box = new THREE.Mesh( 
+	var box = new THREE.Mesh(
 		new THREE.CubeGeometry( 30, length, 4 ), material );
 	box.position.y = length/2;
 	part.add( box );
@@ -94,22 +94,22 @@ function createRobotGrabber( part, length, material )
 
 function createRobotExtender( part, length, material )
 {
-	var cylinder = new THREE.Mesh( 
+	var cylinder = new THREE.Mesh(
 		new THREE.CylinderGeometry( 22, 22, 6, 32 ), material );
 	part.add( cylinder );
 
 	var i;
 	for ( i = 0; i < 4; i++ )
 	{
-		var box = new THREE.Mesh( 
+		var box = new THREE.Mesh(
 			new THREE.CubeGeometry( 4, length, 4 ), material );
 		box.position.x = (i < 2) ? -8 : 8;
 		box.position.y = length/2;
 		box.position.z = (i%2) ? -8 : 8;
 		part.add( box );
 	}
-	
-	cylinder = new THREE.Mesh( 
+
+	cylinder = new THREE.Mesh(
 		new THREE.CylinderGeometry( 15, 15, 40, 32 ), material );
 	cylinder.rotation.x = 90 * Math.PI/180;
 	cylinder.position.y = length;
@@ -118,12 +118,12 @@ function createRobotExtender( part, length, material )
 
 function createRobotCrane( part, length, material )
 {
-	var box = new THREE.Mesh( 
+	var box = new THREE.Mesh(
 		new THREE.CubeGeometry( 18, length, 18 ), material );
 	box.position.y = length/2;
 	part.add( box );
-	
-	var sphere = new THREE.Mesh( 
+
+	var sphere = new THREE.Mesh(
 		new THREE.SphereGeometry( 20, 32, 16 ), material );
 	// place sphere at end of arm
 	sphere.position.y = length;
@@ -151,7 +151,7 @@ function init() {
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,100,0);
-	
+
 	fillScene();
 
 }
@@ -178,13 +178,13 @@ function render() {
 
 	arm.rotation.y = effectController.uy * Math.PI/180;	// yaw
 	arm.rotation.z = effectController.uz * Math.PI/180;	// roll
-	
+
 	forearm.rotation.y = effectController.fy * Math.PI/180;	// yaw
 	forearm.rotation.z = effectController.fz * Math.PI/180;	// roll
-	
+
 	handLeft.rotation.z = effectController.hz * Math.PI/180;	// yaw
 	handLeft.position.z = effectController.htz;	// translate
-	
+
 	renderer.render(scene, camera);
 }
 
@@ -199,7 +199,7 @@ function setupGui() {
 		newGridZ: gridZ,
 		newGround: ground,
 		newAxes: axes,
-		
+
 		uy: 70.0,
 		uz: -15.0,
 

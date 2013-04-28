@@ -22,7 +22,7 @@ function fillScene() {
 
 	var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light.position.set( 200, 400, 500 );
-	
+
 	var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light2.position.set( -500, 250, -200 );
 
@@ -31,7 +31,7 @@ function fillScene() {
 	scene.add(light2);
 
 	if (ground) {
-		Coordinates.drawGround({size:10000});		
+		Coordinates.drawGround({size:10000});
 	}
 	if (gridX) {
 		Coordinates.drawGrid({size:10000,scale:0.01});
@@ -40,22 +40,22 @@ function fillScene() {
 		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
 	}
 	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});	
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
 	}
 	if (axes) {
 		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
 	}
-	
+
 	var petalMaterial = new THREE.MeshLambertMaterial( { color: 0xCC5920 } );
-	
+
 	var flowerHeight = 200;
-	
+
 	var petalLength = 120;
-	
+
 	var cylGeom = new THREE.CylinderGeometry( 15, 0, petalLength, 32 );
-		
+
 	var flower = new THREE.Object3D();
-	
+
 	/////////
 	// student: add code here to make 24 petals, radiating around the sphere.
 	// Scales, rotates, and positions on the cylinder and petals are needed.
@@ -64,17 +64,17 @@ function fillScene() {
 	petal.add( cylinder );
 
 	flower.add( petal );
-	
+
 	/////////
-	
+
 	var stamenMaterial = new THREE.MeshLambertMaterial( { color: 0x333310 } );
-	var stamen = new THREE.Mesh( 
+	var stamen = new THREE.Mesh(
 		new THREE.SphereGeometry( 20, 32, 16 ), stamenMaterial );
 	stamen.position.y = flowerHeight;	// move to flower center
 	flower.add( stamen );
 
 	var stemMaterial = new THREE.MeshLambertMaterial( { color: 0x339424 } );
-	var stem = new THREE.Mesh( 
+	var stem = new THREE.Mesh(
 		new THREE.CylinderGeometry( 10, 10, flowerHeight, 32 ), stemMaterial );
 	stem.position.y = flowerHeight/2;	// move from ground to stamen
 	flower.add( stem );
@@ -103,7 +103,7 @@ function init() {
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,200,0);
-	
+
 	fillScene();
 
 }
@@ -127,7 +127,7 @@ function render() {
 
 		fillScene();
 	}
-	
+
 	renderer.render(scene, camera);
 }
 
