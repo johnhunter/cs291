@@ -1,7 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Extended robot arm exercise: add a body
 ////////////////////////////////////////////////////////////////////////////////
-
 /*global THREE, Coordinates, $, document, window, dat*/
 
 var camera, scene, renderer;
@@ -20,33 +19,15 @@ function fillScene() {
 
 	// LIGHTS
 	var ambientLight = new THREE.AmbientLight( 0x222222 );
-
 	var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light.position.set( 200, 400, 500 );
-
 	var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light2.position.set( -500, 250, -200 );
-
 	scene.add(ambientLight);
 	scene.add(light);
 	scene.add(light2);
 
-	if (ground) {
-		Coordinates.drawGround({size:10000});
-	}
-	if (gridX) {
-		Coordinates.drawGrid({size:10000,scale:0.01});
-	}
-	if (gridY) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
-	}
-	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
-	}
-	if (axes) {
-		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
-	}
-
+    // Robot definitions
 	var robotBaseMaterial = new THREE.MeshPhongMaterial( { color: 0x6E23BB, specular: 0x6E23BB, shininess: 20 } );
 	var robotForearmMaterial = new THREE.MeshPhongMaterial( { color: 0xF4C154, specular: 0xF4C154, shininess: 100 } );
 	var robotUpperArmMaterial = new THREE.MeshPhongMaterial( { color: 0x95E4FB, specular: 0x95E4FB, shininess: 100 } );
@@ -70,13 +51,20 @@ function fillScene() {
 	// Move the forearm itself to the end of the upper arm.
 	forearm.position.y = uaLength;
 	arm.add( forearm );
-	scene.add( arm );
+	//scene.add( arm );
 
-	// Student adds robot body here, puts arm at top.
+    // YOUR CODE HERE
+	body = new THREE.Object3D();
+	var bodyLength = 60;
+	// Add robot body here, put arm at top.
 	// Note that "body" is already declared at top of this code.
-
 	// Here's the call to create the body itself:
-	//createRobotBody( body, bodyLength, robotBodyMaterial );
+	createRobotBody( body, bodyLength, robotBodyMaterial );
+	arm.position.y += bodyLength;
+	body.add( arm );
+	scene.add( body );
+    // ALSO CHECK OUT GUI CONTROLS FOR BODY
+    // IN THE FUNCTIONS setupGUI() and render()
 }
 
 function createRobotExtender( part, length, material )
@@ -144,6 +132,8 @@ function createRobotBody( part, length, material )
 function init() {
 	var canvasWidth = window.innerWidth;
 	var canvasHeight = window.innerHeight;
+	//canvasWidth = 846;
+	//canvasHeight = 494;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
@@ -153,18 +143,43 @@ function init() {
 	renderer.setSize(canvasWidth, canvasHeight);
 	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
 
-	var container = document.getElementById('container');
-	container.appendChild( renderer.domElement );
-
 	// CAMERA
 	camera = new THREE.PerspectiveCamera( 38, canvasRatio, 1, 10000 );
 	camera.position.set( -510, 240, 100 );
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,120,0);
-
+	camera.position.set(-102, 177, 20);
+	cameraControls.target.set(-13, 60, 2);
 	fillScene();
 
+}
+
+function addToDOM() {
+    var container = document.getElementById('container');
+    var canvas = container.getElementsByTagName('canvas');
+    if (canvas.length>0) {
+        container.removeChild(canvas[0]);
+    }
+    container.appendChild( renderer.domElement );
+}
+
+function drawHelpers() {
+    if (ground) {
+		Coordinates.drawGround({size:10000});
+	}
+	if (gridX) {
+		Coordinates.drawGrid({size:10000,scale:0.01});
+	}
+	if (gridY) {
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
+	}
+	if (gridZ) {
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
+	}
+	if (axes) {
+		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
+	}
 }
 
 function animate() {
@@ -187,7 +202,9 @@ function render() {
 		fillScene();
 	}
 
-	// student, uncomment: body.rotation.y = effectController.by * Math.PI/180;	// yaw
+    // UNCOMMENT FOLLOWING LINES TO ENABLE CONTROLS FOR BODY:
+
+	body.rotation.y = effectController.by * Math.PI/180; // yaw
 
 	arm.rotation.y = effectController.uy * Math.PI/180;	// yaw
 	arm.rotation.z = effectController.uz * Math.PI/180;	// roll
@@ -197,8 +214,6 @@ function render() {
 
 	renderer.render(scene, camera);
 }
-
-
 
 function setupGui() {
 
@@ -210,7 +225,8 @@ function setupGui() {
 		newGround: ground,
 		newAxes: axes,
 
-		// student, uncomment: by: 0.0,
+        // UNCOMMENT FOLLOWING LINE TO SET DEFAULT VALUE OF CONTROLS FOR BODY:
+		by: 0.0,
 
 		uy: 70.0,
 		uz: -15.0,
@@ -227,30 +243,17 @@ function setupGui() {
 	h.add( effectController, "newGround" ).name("Show ground");
 	h.add( effectController, "newAxes" ).name("Show axes");
 	h = gui.addFolder("Arm angles");
-	// student, uncomment: h.add(effectController, "by", -180.0, 180.0, 0.025).name("Body y");
+
+	h.add(effectController, "by", -180.0, 180.0, 0.025).name("Body y");
 	h.add(effectController, "uy", -180.0, 180.0, 0.025).name("Upper arm y");
 	h.add(effectController, "uz", -45.0, 45.0, 0.025).name("Upper arm z");
 	h.add(effectController, "fy", -180.0, 180.0, 0.025).name("Forearm y");
 	h.add(effectController, "fz", -120.0, 120.0, 0.025).name("Forearm z");
 }
 
-function takeScreenshot() {
-	effectController.newGround = true, effectController.newGridX = false, effectController.newGridY = false, effectController.newGridZ = false, effectController.newAxes = false;
-	init();
-	render();
-	var img1 = renderer.domElement.toDataURL("image/png");
-	camera.position.set( 400, 500, -800 );
-	render();
-	var img2 = renderer.domElement.toDataURL("image/png");
-	var imgTarget = window.open('', 'For grading script');
-	imgTarget.document.write('<img src="'+img1+'"/><img src="'+img2+'"/>');
-}
-
 init();
+fillScene();
+drawHelpers();
+addToDOM();
 setupGui();
 animate();
-$("body").keydown(function(event) {
-	if (event.which === 80) {
-		takeScreenshot();
-	}
-});
