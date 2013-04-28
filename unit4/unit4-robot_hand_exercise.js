@@ -1,8 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Robot hand exercise: add a second grabber and have it respond
 ////////////////////////////////////////////////////////////////////////////////
-
-/*global THREE, Coordinates, $, document, window, dat */
+/*global THREE, Coordinates, $, document, window, dat*/
 
 var camera, scene, renderer;
 var cameraControls, effectController;
@@ -12,7 +11,7 @@ var gridY = false;
 var gridZ = false;
 var axes = true;
 var ground = true;
-var arm, forearm, handLeft, handRight;
+var arm, forearm, body, handLeft, handRight;
 
 function fillScene() {
 	scene = new THREE.Scene();
@@ -20,33 +19,15 @@ function fillScene() {
 
 	// LIGHTS
 	var ambientLight = new THREE.AmbientLight( 0x222222 );
-
 	var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light.position.set( 200, 400, 500 );
-
 	var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
 	light2.position.set( -500, 250, -200 );
-
 	scene.add(ambientLight);
 	scene.add(light);
 	scene.add(light2);
 
-	if (ground) {
-		Coordinates.drawGround({size:10000});
-	}
-	if (gridX) {
-		Coordinates.drawGrid({size:10000,scale:0.01});
-	}
-	if (gridY) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
-	}
-	if (gridZ) {
-		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
-	}
-	if (axes) {
-		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
-	}
-
+    // Robot definitions
 	var robotHandLeftMaterial = new THREE.MeshPhongMaterial( { color: 0xCC3399, specular: 0xCC3399, shininess: 20 } );
 	var robotHandRightMaterial = new THREE.MeshPhongMaterial( { color: 0xDD3388, specular: 0xDD3388, shininess: 20 } );
 	var robotBaseMaterial = new THREE.MeshPhongMaterial( { color: 0x6E23BB, specular: 0x6E23BB, shininess: 20 } );
@@ -74,7 +55,6 @@ function fillScene() {
 
 	scene.add( arm );
 
-
 	var handLength = 38;
 
 	handLeft = new THREE.Object3D();
@@ -82,6 +62,14 @@ function fillScene() {
 	// Move the hand part to the end of the forearm.
 	handLeft.position.y = faLength;
 	forearm.add( handLeft );
+
+    // YOUR CODE HERE
+	// Add the second grabber handRight. Note that it uses a different color, defined above
+	handRight = new THREE.Object3D();
+	createRobotGrabber( handRight, handLength, robotHandRightMaterial );
+	handRight.position.y = faLength;
+	forearm.add( handRight );
+    // ALSO EDIT render() TO ENABLE CONTROLS FOR GRABBER
 }
 
 function createRobotGrabber( part, length, material )
@@ -133,6 +121,8 @@ function createRobotCrane( part, length, material )
 function init() {
 	var canvasWidth = window.innerWidth;
 	var canvasHeight = window.innerHeight;
+	//canvasWidth = 846;
+	//canvasHeight = 494;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
@@ -142,18 +132,41 @@ function init() {
 	renderer.setSize(canvasWidth, canvasHeight);
 	renderer.setClearColorHex( 0xAAAAAA, 1.0 );
 
-	var container = document.getElementById('container');
-	container.appendChild( renderer.domElement );
-
 	// CAMERA
-	camera = new THREE.PerspectiveCamera( 30, canvasRatio, 1, 10000 );
-	camera.position.set( -510, 240, 100 );
+	camera = new THREE.PerspectiveCamera( 38, canvasRatio, 1, 10000 );
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
-	cameraControls.target.set(0,100,0);
-
+	camera.position.set(-49, 242,54);
+	cameraControls.target.set(54, 106, 33);
 	fillScene();
 
+}
+
+function addToDOM() {
+    var container = document.getElementById('container');
+    var canvas = container.getElementsByTagName('canvas');
+    if (canvas.length>0) {
+        container.removeChild(canvas[0]);
+    }
+    container.appendChild( renderer.domElement );
+}
+
+function drawHelpers() {
+    if (ground) {
+		Coordinates.drawGround({size:10000});
+	}
+	if (gridX) {
+		Coordinates.drawGrid({size:10000,scale:0.01});
+	}
+	if (gridY) {
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"y"});
+	}
+	if (gridZ) {
+		Coordinates.drawGrid({size:10000,scale:0.01, orientation:"z"});
+	}
+	if (axes) {
+		Coordinates.drawAllAxes({axisLength:200,axisRadius:1,axisTess:50});
+	}
 }
 
 function animate() {
@@ -182,13 +195,15 @@ function render() {
 	forearm.rotation.y = effectController.fy * Math.PI/180;	// yaw
 	forearm.rotation.z = effectController.fz * Math.PI/180;	// roll
 
-	handLeft.rotation.z = effectController.hz * Math.PI/180;	// yaw
+    // ADD handRight yaw AND translate HERE
+    handLeft.rotation.z = effectController.hz * Math.PI/180;	// yaw
 	handLeft.position.z = effectController.htz;	// translate
+
+	handRight.rotation.z = effectController.hz * Math.PI/180;	// yaw
+	handRight.position.z = -effectController.htz;	// translate
 
 	renderer.render(scene, camera);
 }
-
-
 
 function setupGui() {
 
@@ -206,7 +221,7 @@ function setupGui() {
 		fy: 10.0,
 		fz: 60.0,
 
-		hz: 30.0,
+        hz: 30.0,
 		htz: 12.0
 	};
 
@@ -222,27 +237,13 @@ function setupGui() {
 	h.add(effectController, "uz", -45.0, 45.0, 0.025).name("Upper arm z");
 	h.add(effectController, "fy", -180.0, 180.0, 0.025).name("Forearm y");
 	h.add(effectController, "fz", -120.0, 120.0, 0.025).name("Forearm z");
-	h.add(effectController, "hz", -45.0, 45.0, 0.025).name("Hand z");
+    h.add(effectController, "hz", -45.0, 45.0, 0.025).name("Hand z");
 	h.add(effectController, "htz", 2.0, 17.0, 0.025).name("Hand spread");
 }
 
-function takeScreenshot() {
-	effectController.newGround = true, effectController.newGridX = false, effectController.newGridY = false, effectController.newGridZ = false, effectController.newAxes = false;
-	init();
-	render();
-	var img1 = renderer.domElement.toDataURL("image/png");
-	camera.position.set( 400, 500, -800 );
-	render();
-	var img2 = renderer.domElement.toDataURL("image/png");
-	var imgTarget = window.open('', 'For grading script');
-	imgTarget.document.write('<img src="'+img1+'"/><img src="'+img2+'"/>');
-}
-
 init();
+fillScene();
+drawHelpers();
+addToDOM();
 setupGui();
 animate();
-$("body").keydown(function(event) {
-	if (event.which === 80) {
-		takeScreenshot();
-	}
-});
