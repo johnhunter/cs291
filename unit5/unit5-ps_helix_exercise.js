@@ -121,10 +121,11 @@ function fillScene() {
 //   clockwise - if true, go counterclockwise up the axis
 function createHelix( material, radius, tube, radialSegments, tubularSegments, height, arc, clockwise )
 {
-	// defaults
-	tubularSegments = (tubularSegments === undefined) ? 32 : tubularSegments;
-	arc = (arc === undefined) ? 1 : arc;
-	clockwise = (clockwise === undefined) ? true : clockwise;
+	// defaults: if parameter is not passed in, "undefined",
+	// then the value to the right is used instead.
+	tubularSegments = tubularSegments || 32;
+	arc = arc || 1;
+	clockwise = clockwise || true;
 
 	var helix = new THREE.Object3D();
 

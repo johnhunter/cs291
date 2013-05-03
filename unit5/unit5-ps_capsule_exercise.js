@@ -125,10 +125,11 @@ function fillScene() {
 //   openTop, openBottom - whether the end is given a sphere; true means they are not
 function createCapsule( material, radius, top, bottom, segmentsWidth, openTop, openBottom )
 {
-	// defaults
-	segmentsWidth = (segmentsWidth === undefined) ? 32 : segmentsWidth;
-	openTop = (openTop === undefined) ? false : openTop;
-	openBottom = (openBottom === undefined) ? false : openBottom;
+	// defaults: if parameter is not passed in, "undefined",
+	// then the value to the right is used instead.
+	segmentsWidth = segmentsWidth || 32;
+	openTop = openTop || false;
+	openBottom = openBottom || false;
 
 	// get cylinder height
 	var cylAxis = new THREE.Vector3();

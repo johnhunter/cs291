@@ -127,9 +127,10 @@ function fillScene() {
 //   openEnded - whether the ends of the cone are generated; true means they are not
 function createCylinderFromEnds( material, radiusTop, radiusBottom, top, bottom, segmentsWidth, openEnded)
 {
-	// defaults
-	segmentsWidth = (segmentsWidth === undefined) ? 32 : segmentsWidth;
-	openEnded = (openEnded === undefined) ? false : openEnded;
+	// defaults: if parameter is not passed in, "undefined",
+	// then the value to the right is used instead.
+	segmentsWidth = segmentsWidth || 32;
+	openEnded = openEnded || false;
 
 	// Dummy settings, replace with proper code:
 	var length = 100;

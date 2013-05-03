@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Draw a Square Exercise                                                     //
-// Your task is to complete the function square (at line 28).                 //
-// The function takes 4 arguments - coordinates x1, y1, x2, y2                //
-// for the square and returns a geometry object (THREE.Geometry())            //
-// that defines a square at the provided coordinates.                         //
+// Draw a Square Exercise
+// Your task is to complete the function square (at line 28).
+// The function takes 4 arguments - coordinates x1, y1, x2, y2
+// for the square and returns a geometry object (THREE.Geometry())
+// that defines a square at the provided coordinates.
 ////////////////////////////////////////////////////////////////////////////////
 /*global THREE, Coordinates, document, window*/
 
@@ -60,12 +60,12 @@ function init() {
 }
 
 function addToDOM() {
-    var container = document.getElementById('container');
-    var canvas = container.getElementsByTagName('canvas');
-    if (canvas.length>0) {
-        container.removeChild(canvas[0]);
-    }
-    container.appendChild( renderer.domElement );
+	var container = document.getElementById('container');
+	var canvas = container.getElementsByTagName('canvas');
+	if (canvas.length>0) {
+		container.removeChild(canvas[0]);
+	}
+	container.appendChild( renderer.domElement );
 }
 
 function render() {
