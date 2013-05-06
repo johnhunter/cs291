@@ -33,8 +33,32 @@ function fillScene() {
 	var cylinderMaterial = new THREE.MeshPhongMaterial( { color: 0xD1F5FD, specular: 0xD1F5FD, shininess: 100 } );
 	// get two diagonally-opposite corners of the cube and compute the
 	// cylinder axis direction and length
-	var maxCorner = new THREE.Vector3(  1, 1, 1 );
-	var minCorner = new THREE.Vector3( -1,-1,-1 );
+
+	// YOUR CODE HERE
+
+	scene.add( makeSpine(cylinderMaterial,
+		new THREE.Vector3(  1,  1,  1 ),
+		new THREE.Vector3( -1, -1, -1 ),
+		new THREE.Vector3(  1,  0, -1 ), false ) );
+
+	scene.add( makeSpine(cylinderMaterial,
+		new THREE.Vector3(  1,  1, -1 ),
+		new THREE.Vector3( -1, -1,  1 ),
+		new THREE.Vector3(  1,  0,  1 ), true ) );
+
+	scene.add( makeSpine(cylinderMaterial,
+		new THREE.Vector3( -1,  1,  1 ),
+		new THREE.Vector3(  1, -1, -1 ),
+		new THREE.Vector3(  1,  0,  1 ), false ) );
+
+	scene.add( makeSpine(cylinderMaterial,
+		new THREE.Vector3( -1,  1, -1 ),
+		new THREE.Vector3(  1, -1,  1 ),
+		new THREE.Vector3( -1,  0,  1 ), false ) );
+
+}
+
+function makeSpine (material, maxCorner, minCorner, rotationAxis, isCounterClockwise) {
 	// note how you can chain one operation on to another:
 	var cylAxis = new THREE.Vector3().subVectors( maxCorner, minCorner );
 	var cylLength = cylAxis.length();
@@ -43,64 +67,19 @@ function fillScene() {
 	cylAxis.normalize();
 	var theta = Math.acos( cylAxis.dot( new THREE.Vector3(0,1,0) ) );
 	// or just simply theta = Math.acos( cylAxis.y );
+	if (isCounterClockwise) {
+		theta = -theta;
+	}
 
 	var cylinder = new THREE.Mesh(
-		new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), cylinderMaterial );
-	var rotationAxis = new THREE.Vector3(1,0,-1);
+		new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), material );
 	// makeRotationAxis wants its axis normalized
 	rotationAxis.normalize();
 	// don't use position, rotation, scale
 	cylinder.matrixAutoUpdate = false;
 	cylinder.matrix.makeRotationAxis( rotationAxis, theta );
-	scene.add( cylinder );
 
-    // YOUR CODE HERE
-
-    // cylinder 2
-	maxCorner = new THREE.Vector3(  1,  1, -1 );
-	minCorner = new THREE.Vector3( -1, -1,  1 );
-	cylAxis = new THREE.Vector3().subVectors( maxCorner, minCorner );
-	cylLength = cylAxis.length();
-	cylAxis.normalize();
-	theta = - Math.acos( cylAxis.dot( new THREE.Vector3(0,1,0) ) );
-	var cylinder2 = new THREE.Mesh(
-		new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), cylinderMaterial );
-	rotationAxis = new THREE.Vector3(  1,  0,  1 );
-	rotationAxis.normalize();
-	cylinder2.matrixAutoUpdate = false;
-	cylinder2.matrix.makeRotationAxis( rotationAxis, theta );
-	scene.add( cylinder2 );
-
-	// cylinder 3
-	maxCorner = new THREE.Vector3(  -1,  1,  1 );
-	minCorner = new THREE.Vector3(   1, -1, -1 );
-	cylAxis = new THREE.Vector3().subVectors( maxCorner, minCorner );
-	cylLength = cylAxis.length();
-	cylAxis.normalize();
-	theta = Math.acos( cylAxis.dot( new THREE.Vector3(0,1,0) ) );
-	var cylinder3 = new THREE.Mesh(
-		new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), cylinderMaterial );
-	rotationAxis = new THREE.Vector3(  1,  0,  1 );
-	rotationAxis.normalize();
-	cylinder3.matrixAutoUpdate = false;
-	cylinder3.matrix.makeRotationAxis( rotationAxis, theta );
-	scene.add( cylinder3 );
-
-		// cylinder 4
-	maxCorner = new THREE.Vector3(  -1,  1, -1 );
-	minCorner = new THREE.Vector3(   1, -1,  1 );
-	cylAxis = new THREE.Vector3().subVectors( maxCorner, minCorner );
-	cylLength = cylAxis.length();
-	cylAxis.normalize();
-	theta = Math.acos( cylAxis.dot( new THREE.Vector3(0,1,0) ) );
-	var cylinder4 = new THREE.Mesh(
-		new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), cylinderMaterial );
-	rotationAxis = new THREE.Vector3( -1,  0,  1);
-	rotationAxis.normalize();
-	cylinder4.matrixAutoUpdate = false;
-	cylinder4.matrix.makeRotationAxis( rotationAxis, theta );
-	scene.add( cylinder4 );
-
+	return cylinder;
 }
 
 function drawHelpers() {
