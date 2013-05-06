@@ -1,8 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Ornament axis/angle exercise: add three more cylinders to the ornament
 ////////////////////////////////////////////////////////////////////////////////
-
-/*global THREE, Coordinates, $, document, window, dat*/
+/*global THREE, Coordinates, document, window, dat*/
 
 var camera, scene, renderer;
 var cameraControls, effectController;
@@ -31,30 +30,6 @@ function fillScene() {
 	scene.add(light);
 	scene.add(light2);
 
-	if (ground) {
-		Coordinates.drawGround({size:100,offset:-0.01});
-	}
-	if (gridX) {
-		Coordinates.drawGrid({size:100,scale:1});
-	}
-	if (gridY) {
-		Coordinates.drawGrid({size:100,scale:1, orientation:"y"});
-	}
-	if (gridZ) {
-		Coordinates.drawGrid({size:100,scale:1, orientation:"z"});
-	}
-	if (axes) {
-		Coordinates.drawAllAxes({axisLength:5,axisRadius:0.01,axisTess:50});
-	}
-
-	if (bCube) {
-		var cubeMaterial = new THREE.MeshLambertMaterial(
-			{ color: 0xFFFFFF, opacity: 0.7, transparent: true } );
-		var cube = new THREE.Mesh(
-			new THREE.CubeGeometry( 2, 2, 2 ), cubeMaterial );
-		scene.add( cube );
-	}
-
 	var cylinderMaterial = new THREE.MeshPhongMaterial( { color: 0xD1F5FD, specular: 0xD1F5FD, shininess: 100 } );
 
 	// get two diagonally-opposite corners of the cube and compute the
@@ -75,15 +50,45 @@ function fillScene() {
 	var rotationAxis = new THREE.Vector3(1,0,-1);
 	// makeRotationAxis wants its axis normalized
 	rotationAxis.normalize();
-	// don’t use position, rotation, scale
+	// don't use position, rotation, scale
 	cylinder.matrixAutoUpdate = false;
 	cylinder.matrix.makeRotationAxis( rotationAxis, theta );
 	scene.add( cylinder );
+
+    // YOUR CODE HERE
+
+}
+
+function drawHelpers() {
+	if (ground) {
+		Coordinates.drawGround({size:100,offset:-0.01});
+	}
+	if (gridX) {
+		Coordinates.drawGrid({size:100,scale:1});
+	}
+	if (gridY) {
+		Coordinates.drawGrid({size:100,scale:1, orientation:"y"});
+	}
+	if (gridZ) {
+		Coordinates.drawGrid({size:100,scale:1, orientation:"z"});
+	}
+	if (axes) {
+		Coordinates.drawAllAxes({axisLength:5,axisRadius:0.01,axisTess:50});
+	}
+    if (bCube) {
+		var cubeMaterial = new THREE.MeshLambertMaterial(
+			{ color: 0xFFFFFF, opacity: 0.7, transparent: true } );
+		var cube = new THREE.Mesh(
+			new THREE.CubeGeometry( 2, 2, 2 ), cubeMaterial );
+		scene.add( cube );
+	}
 }
 
 function init() {
 	var canvasWidth = window.innerWidth;
 	var canvasHeight = window.innerHeight;
+	//canvasWidth = 846;
+	//canvasHeight = 494;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
@@ -98,14 +103,20 @@ function init() {
 
 	// CAMERA
 	camera = new THREE.PerspectiveCamera( 30, canvasRatio, 1, 10000 );
-	camera.position.set( -7, 7, 2 );
-
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
+    camera.position.set( -7, 7, 2 );
 	cameraControls.target.set(0,0,0);
 
-	fillScene();
+}
 
+function addToDOM() {
+    var container = document.getElementById('container');
+    var canvas = container.getElementsByTagName('canvas');
+    if (canvas.length>0) {
+        container.removeChild(canvas[0]);
+    }
+    container.appendChild( renderer.domElement );
 }
 
 function animate() {
@@ -154,24 +165,9 @@ function setupGui() {
 	gui.add( effectController, "newAxes" ).name("Show axes");
 }
 
-function takeScreenshot() {
-	effectController.newCube = false,
-	effectController.newGround = false, effectController.newGridX = false, effectController.newGridY = false, effectController.newGridZ = false, effectController.newAxes = false;
-	init();
-	render();
-	var img1 = renderer.domElement.toDataURL("image/png");
-	camera.position.set( 6, 5, -3 );
-	render();
-	var img2 = renderer.domElement.toDataURL("image/png");
-	var imgTarget = window.open('', 'For grading script');
-	imgTarget.document.write('<img src="'+img1+'"/><img src="'+img2+'"/>');
-}
-
 init();
+fillScene();
+addToDOM();
 setupGui();
+drawHelpers();
 animate();
-$("body").keydown(function(event) {
-	if (event.which === 80) {
-		takeScreenshot();
-	}
-});
