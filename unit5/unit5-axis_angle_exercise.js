@@ -31,35 +31,11 @@ function fillScene() {
 	scene.add(light2);
 
 	var cylinderMaterial = new THREE.MeshPhongMaterial( { color: 0xD1F5FD, specular: 0xD1F5FD, shininess: 100 } );
+
 	// get two diagonally-opposite corners of the cube and compute the
 	// cylinder axis direction and length
-
-	// YOUR CODE HERE
-
-	scene.add( makeSpine(cylinderMaterial,
-		new THREE.Vector3(  1,  1,  1 ),
-		new THREE.Vector3( -1, -1, -1 ),
-		new THREE.Vector3(  1,  0, -1 ), false ) );
-
-	scene.add( makeSpine(cylinderMaterial,
-		new THREE.Vector3(  1,  1, -1 ),
-		new THREE.Vector3( -1, -1,  1 ),
-		new THREE.Vector3(  1,  0,  1 ), true ) );
-
-	scene.add( makeSpine(cylinderMaterial,
-		new THREE.Vector3( -1,  1,  1 ),
-		new THREE.Vector3(  1, -1, -1 ),
-		new THREE.Vector3(  1,  0,  1 ), false ) );
-
-	scene.add( makeSpine(cylinderMaterial,
-		new THREE.Vector3( -1,  1, -1 ),
-		new THREE.Vector3(  1, -1,  1 ),
-		new THREE.Vector3( -1,  0,  1 ), false ) );
-
-}
-
-function makeSpine (material, maxCorner, minCorner, rotationAxis, isCounterClockwise) {
-	// note how you can chain one operation on to another:
+	var maxCorner = new THREE.Vector3(  1, 1, 1 );
+	var minCorner = new THREE.Vector3( -1,-1,-1 );
 	var cylAxis = new THREE.Vector3().subVectors( maxCorner, minCorner );
 	var cylLength = cylAxis.length();
 
@@ -67,19 +43,29 @@ function makeSpine (material, maxCorner, minCorner, rotationAxis, isCounterClock
 	cylAxis.normalize();
 	var theta = Math.acos( cylAxis.dot( new THREE.Vector3(0,1,0) ) );
 	// or just simply theta = Math.acos( cylAxis.y );
-	if (isCounterClockwise) {
-		theta = -theta;
+
+	var cylinderGeo = new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 );
+
+	for (var i = 0; i < 4; i++) {
+		var cylinder = new THREE.Mesh( cylinderGeo, cylinderMaterial );
+
+		var x = (i < 2) ? -1 : 1;
+		var z = (i % 2) ? -1 : 1;
+
+		// rotate around the 4 corners at y = 0
+		// i.e:
+		// -1, 0,  1
+		// -1, 0, -1,
+		//  1, 0,  1
+		//  1, 0, -1
+		var rotationAxis = new THREE.Vector3( x, 0, z );
+		rotationAxis.normalize();
+
+		cylinder.matrixAutoUpdate = false;
+		cylinder.matrix.makeRotationAxis( rotationAxis, theta );
+
+		scene.add( cylinder );
 	}
-
-	var cylinder = new THREE.Mesh(
-		new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), material );
-	// makeRotationAxis wants its axis normalized
-	rotationAxis.normalize();
-	// don't use position, rotation, scale
-	cylinder.matrixAutoUpdate = false;
-	cylinder.matrix.makeRotationAxis( rotationAxis, theta );
-
-	return cylinder;
 }
 
 function drawHelpers() {
