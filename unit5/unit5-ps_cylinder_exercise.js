@@ -28,10 +28,14 @@ function createCylinderFromEnds( material, radiusTop, radiusBottom, top, bottom,
 	openEnded = (openEnded === undefined) ? false : openEnded;
 
 	// Dummy settings, replace with proper code:
-	var length = 100;
-	var cylAxis = new THREE.Vector3(100,100,-100);
-	var center = new THREE.Vector3(-100,100,100);
-	////////////////////
+	var length;
+	var cylAxis;
+	var center;
+
+	cylAxis = new THREE.Vector3().subVectors(top, bottom);
+	length = cylAxis.length();
+	// get average of 2 points...
+	center = new THREE.Vector3().addVectors(top, bottom).divideScalar(2);
 
 	var cylGeom = new THREE.CylinderGeometry( radiusTop, radiusBottom, length, segmentsWidth, 1, openEnded );
 	var cyl = new THREE.Mesh( cylGeom, material );
@@ -169,8 +173,8 @@ function fillScene() {
 function init() {
 	var canvasWidth = window.innerWidth;
 	var canvasHeight = window.innerHeight;
-	canvasWidth = 846;
-    canvasHeight = 494;
+	//canvasWidth = 846;
+    //canvasHeight = 494;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
