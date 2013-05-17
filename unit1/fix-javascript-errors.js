@@ -3,10 +3,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Your task is to find the syntax errors in this Javacript
 // until it shows the the Gold Cube!
-// Use Developer tools/JavaScript console in Chrome,
-// FireBug in FireFox, or Web Inspector in Safari.
 // WebGL is not supported in Internet Explorer
-// There are 4 syntax errors in this code
+// There are 3 syntax errors in this code
 ////////////////////////////////////////////////////////////////////////////////
 /*global THREE, Coordinates, $, document, window*/
 
@@ -34,8 +32,11 @@ function drawGoldCube() {
 }
 
 function init() {
-	var canvasWidth = window.innerWidth;
-	var canvasHeight = window.innerHeight;
+	var canvasWidth = 846;
+	var canvasHeight = 494;
+	// For grading the window is fixed in size; here's general code:
+	//var canvasWidth = window.innerWidth;
+	//var canvasHeight = window.innerHeight;
 	var canvasRatio = canvasWidth / canvasHeight;
 	// SCENE
 	scene = new THREE.Scene();

@@ -1,9 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Cylinder creation: add glue code to make point-to-point cylinders
-////////////////////////////////////////////////////////////////////////////////
-/*global THREE, Coordinates, document, window, dat*/
 // Your task is to modify the createCylinderFromEnds function
 ////////////////////////////////////////////////////////////////////////////////
+/*global THREE, Coordinates, document, window, dat*/
 var camera, scene, renderer;
 var cameraControls, effectController;
 var clock = new THREE.Clock();
@@ -28,14 +27,10 @@ function createCylinderFromEnds( material, radiusTop, radiusBottom, top, bottom,
 	openEnded = (openEnded === undefined) ? false : openEnded;
 
 	// Dummy settings, replace with proper code:
-	var length;
-	var cylAxis;
-	var center;
-
-	cylAxis = new THREE.Vector3().subVectors(top, bottom);
-	length = cylAxis.length();
-	// get average of 2 points...
-	center = new THREE.Vector3().addVectors(top, bottom).divideScalar(2);
+	var length = 100;
+	var cylAxis = new THREE.Vector3(100,100,-100);
+	var center = new THREE.Vector3(-100,100,100);
+	////////////////////
 
 	var cylGeom = new THREE.CylinderGeometry( radiusTop, radiusBottom, length, segmentsWidth, 1, openEnded );
 	var cyl = new THREE.Mesh( cylGeom, material );
@@ -86,18 +81,17 @@ function fillScene() {
 	// LIGHTS
 	var ambientLight = new THREE.AmbientLight( 0x222222 );
 
-	var light = new THREE.DirectionalLight( 0xffffff, 1.0 );
+	var light = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
 	light.position.set( 200, 400, 500 );
 
-	var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
+	var light2 = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
 	light2.position.set( -500, 250, -200 );
 
 	scene.add(ambientLight);
 	scene.add(light);
 	scene.add(light2);
 
-    // TEST MATERIALS AND OBJECTS
-    // DO NOT MODIFY FOR GRADING
+	// TEST MATERIALS AND OBJECTS
 	var redMaterial = new THREE.MeshLambertMaterial( { color: 0xFF0000 } );
 	var greenMaterial = new THREE.MeshLambertMaterial( { color: 0x00FF00 } );
 	var blueMaterial = new THREE.MeshLambertMaterial( { color: 0x0000FF } );
@@ -171,10 +165,11 @@ function fillScene() {
 }
 
 function init() {
-	var canvasWidth = window.innerWidth;
-	var canvasHeight = window.innerHeight;
-	//canvasWidth = 846;
-    //canvasHeight = 494;
+	var canvasWidth = 846;
+	var canvasHeight = 494;
+	// For grading the window is fixed in size; here's general code:
+	//var canvasWidth = window.innerWidth;
+	//var canvasHeight = window.innerHeight;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	// RENDERER
@@ -194,16 +189,16 @@ function init() {
 }
 
 function addToDOM() {
-    var container = document.getElementById('container');
-    var canvas = container.getElementsByTagName('canvas');
-    if (canvas.length>0) {
-        container.removeChild(canvas[0]);
-    }
-    container.appendChild( renderer.domElement );
+	var container = document.getElementById('container');
+	var canvas = container.getElementsByTagName('canvas');
+	if (canvas.length>0) {
+		container.removeChild(canvas[0]);
+	}
+	container.appendChild( renderer.domElement );
 }
 
 function drawHelpers() {
-  if (ground) {
+	if (ground) {
 		Coordinates.drawGround({size:10000});
 	}
 	if (gridX) {
@@ -236,7 +231,8 @@ function render() {
 		gridZ = effectController.newGridZ;
 		ground = effectController.newGround;
 		axes = effectController.newAxes;
-        fillScene();
+
+		fillScene();
 		drawHelpers();
 	}
 
@@ -265,9 +261,15 @@ function setupGui() {
 	h.add( effectController, "newAxes" ).name("Show axes");
 }
 
-init();
-fillScene();
-drawHelpers();
-addToDOM();
-setupGui();
-animate();
+try {
+	init();
+	fillScene();
+	drawHelpers();
+	setupGui();
+	addToDOM();
+	animate();
+} catch(e) {
+	var errorReport = "Your program encountered an unrecoverable error, can not draw on canvas. Error was:<br/><br/>";
+	$('#container').append(errorReport+e);
+}
+

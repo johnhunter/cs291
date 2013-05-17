@@ -6,6 +6,8 @@
 
 //if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
+var path = "/";	// STUDENT: set to "" to run on your computer, "/" for submitting code to Udacity
+
 var camera, scene, renderer, stats;
 var cameraControls;
 
@@ -50,7 +52,7 @@ function init() {
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,0,0);
-	
+
 	fillScene();
 }
 
@@ -64,7 +66,7 @@ function fillScene() {
 
 		var vertex = new THREE.Vector3();
 		// accept the point only if it's in the sphere
-		do { 
+		do {
 			vertex.x = 2000 * Math.random() - 1000;
 			vertex.y = 2000 * Math.random() - 1000;
 			vertex.z = 2000 * Math.random() - 1000;
@@ -74,7 +76,7 @@ function fillScene() {
 
 	}
 
-	var disk = THREE.ImageUtils.loadTexture( "/media/img/cs291/disc.png" );
+	var disk = THREE.ImageUtils.loadTexture( path + 'media/img/cs291/disc.png' );
 	var material = new THREE.ParticleBasicMaterial(
 		{ size: 35, sizeAttenuation: false, map: disk, transparent: true } );
 	material.color.setHSL( 0.9, 0.2, 0.6 );
